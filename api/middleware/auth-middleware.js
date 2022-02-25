@@ -17,10 +17,9 @@ const checkUsernameTaken = async (req, res, next) => {
 }
 
 const validatePayload = (req, res, next) => {
-  const username = req.body.username.trim()
-  const password = req.body.password.trim()
-
-  if(!username || !password) {
+  if(!req.body.username || !req.body.username.trim()) {
+    res.status(422).json({ message: 'username and password required'})
+  } else if(!req.body.password || !req.body.password.trim()) {
     res.status(422).json({ message: 'username and password required'})
   } else {
     next()
