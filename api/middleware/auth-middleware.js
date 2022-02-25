@@ -31,5 +31,5 @@ const validatePayload = (req, res, next) => {
 
 module.exports = {
   checkUsernameTaken,
-  validatePayload
+  validatePayload,
 }
