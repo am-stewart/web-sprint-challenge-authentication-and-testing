@@ -1,10 +1,20 @@
-const { checkUsernameTaken, validatePayload } = require('../middleware/auth-middleware');
-
 const router = require('express').Router();
+const { checkUsernameTaken, validatePayload } = require('../middleware/auth-middleware');
+// const { JWT_SECRET } = require('../secrets')
+const bcrypt = require('bcryptjs/dist/bcrypt')
+const jwt = require('jsonwebtoken')
+const Users = require('../model')
 
-router.post('/register', checkUsernameTaken, validatePayload, (req, res) => {
-  res.end('implement register, please!');
+router.post('/register', validatePayload, checkUsernameTaken, (req, res, next) => {
+  let user = req.body
+  const hash = bcrypt.hashSync(user.password, 8)
+  user.password = hash
 
+  Users.add(user)
+    .then(user => {
+      res.status(201).json(user)
+    })
+    .catch(next)
 });  
 /*
     IMPLEMENT

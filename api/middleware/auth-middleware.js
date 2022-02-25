@@ -1,8 +1,4 @@
-const db = require('../../data/dbConfig')
-
-function findBy(filter) {
-  return db('users').where(filter)
-}
+const { findBy } = require('../model')
 
 const checkUsernameTaken = async (req, res, next) => {
   try {
@@ -21,7 +17,10 @@ const checkUsernameTaken = async (req, res, next) => {
 }
 
 const validatePayload = (req, res, next) => {
-  if(!req.body.username || !req.body.password) {
+  let username = req.body.username.trim()
+  let password = req.body.password.trim()
+
+  if(!username || !password) {
     res.status(422).json({ message: 'username and password required'})
   } else {
     next()
