@@ -4,7 +4,6 @@ function findBy(filter) {
   return db('users').where(filter)
 }
 
-
 const checkUsernameTaken = async (req, res, next) => {
   try {
     const existingUsers = await findBy({ username: req.body.username })
@@ -14,15 +13,24 @@ const checkUsernameTaken = async (req, res, next) => {
         message: 'username taken'
       })
     } else {
-      next();
+      next()
     }
   } catch (err) {
     next(err)
   }
 }
 
+const validatePayload = (req, res, next) => {
+  if(!req.body.username || !req.body.password) {
+    res.status(422).json({ message: 'username and password required'})
+  } else {
+    next()
+  }
+}
+
 
 
 module.exports = {
-  checkUsernameTaken
+  checkUsernameTaken,
+  validatePayload
 }
